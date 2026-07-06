@@ -9,6 +9,7 @@ export function App() {
   const [containers, setContainers] = useState<ContainerStatus[]>([]);
   const [alerts, setAlerts] = useState<AlertItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -19,6 +20,7 @@ export function App() {
         if (!active) return;
         setContainers(nextContainers);
         setAlerts(nextAlerts);
+        setUpdatedAt(new Date());
         setError(null);
       } catch (err) {
         if (active) setError((err as Error).message);
@@ -34,15 +36,39 @@ export function App() {
   }, []);
 
   return (
-    <main style={{ fontFamily: 'system-ui', maxWidth: 900, margin: '0 auto', padding: 24 }}>
-      <h1>coldchain dashboard</h1>
-      {error && <p style={{ color: 'crimson' }}>השירות לא זמין: {error}</p>}
-      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }}>
+    <div className="app">
+      <header className="header">
+        <h1>
+          <span className="brand">coldchain</span> · חדר בקרה
+        </h1>
+        <div className="spacer" />
+        <div className={`live${error ? ' down' : ''}`}>
+          <span className="dot" />
+          {error ? (
+            <span>אין חיבור לשירות</span>
+          ) : (
+            <>
+              <span>עודכן</span>
+              <span className="time">{updatedAt ? updatedAt.toLocaleTimeString('he-IL') : '...'}</span>
+            </>
+          )}
+        </div>
+      </header>
+
+      {error && (
+        <div className="error-banner">
+          <b>השירות לא זמין.</b> ודאו שהוא רץ: <code>npm run dev</code> בתיקיית הפרויקט,
+          ואז רעננו. ({error})
+        </div>
+      )}
+
+      <section className="grid">
         {containers.map((container) => (
           <ContainerCard key={container.deviceId} container={container} />
         ))}
       </section>
+
       <AlertList alerts={alerts} />
-    </main>
+    </div>
   );
 }
