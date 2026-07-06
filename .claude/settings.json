@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(.env*)",
+      "Read(secrets/**)",
+      "Read(**/*.pem)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/check-secrets.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

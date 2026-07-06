@@ -1,0 +1,14 @@
+{
+  "name": "coldchain-demo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "service",
+    "dashboard"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w service",
+    "test": "npm test -w service",
+    "build": "npm run build -w service"
+  }
+}

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+*.o
+firmware/test_parser
+firmware/parser
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+.DS_Store
+
+.omc/
