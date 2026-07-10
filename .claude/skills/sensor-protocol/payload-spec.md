@@ -1,52 +1,55 @@
-# מפרט שדר ArrowTrack, גרסה 3
+# ArrowTrack payload spec, version 3
 
-הודעה בינארית באורך קבוע: 24 בתים. משודרת בכל אינטרוול דיווח
-(ברירת מחדל: כל 5 דקות, או מיידית באירוע דלת או תנועה).
+Fixed-length binary message: 24 bytes. Transmitted on every reporting
+interval (default: every 5 minutes, or immediately on a door or motion
+event).
 
-## שדות
+## Fields
 
-### בתים 0-3: מזהה מכשיר
-uint32 בסדר בתים big-endian. מזהה יצרן קבוע שנצרב בייצור.
-בתצוגה ובלוגים נהוג להציג אותו כמחרוזת הקסה בת 8 תווים.
+### Bytes 0-3: device id
+uint32 big-endian. Fixed vendor id burned in at manufacturing.
+Displayed in logs and UIs as an 8-character hex string.
 
-### בית 4: טמפרטורה
-int8 חתום, מעלות צלזיוס שלמות, טווח -128 עד +127.
-ערכים אופייניים: מטען קפוא -25 עד -15, מטען מקורר +2 עד +8.
-הערך 0x80 (מינוס 128) שמור לציון "חיישן מנותק".
+### Byte 4: temperature
+Signed int8, whole degrees Celsius, range -128 to +127.
+Typical values: frozen cargo -25 to -15, chilled cargo +2 to +8.
+The value 0x80 (minus 128) is reserved to mean "sensor disconnected".
 
-שימו לב: זהו השדה הרגיש ביותר לבאגים. קריאה שלו כ-uint8
-תהפוך כל טמפרטורת הקפאה לערך חיובי גבוה (מינוס 18 יהפוך ל-238),
-וכל לוגיקת ההתראות תפספס בדיוק את המטענים היקרים ביותר.
+Note: this is the most bug-prone field in the protocol. Reading it
+as uint8 turns every freezer temperature into a large positive value
+(minus 18 becomes 238), and the alert logic will miss exactly the
+most valuable cargo.
 
-### בית 5: דגלים
-bitfield, ביט דלוק = מצב פעיל:
+### Byte 5: flags
+Bitfield, a set bit means the state is active:
 
-| ביט | מסכה | משמעות |
+| Bit | Mask | Meaning |
 |---|---|---|
-| 0 | 0x01 | תנועה זוהתה מאז השידור הקודם |
-| 1 | 0x02 | דלת פתוחה כרגע |
-| 2 | 0x04 | חשד לחבלה |
-| 3 | 0x08 | מחובר למקור מתח חיצוני |
-| 4 | 0x10 | סוללה תקינה (מעל 20 אחוז) |
-| 5-7 | | שמור, תמיד 0 |
+| 0 | 0x01 | Motion detected since the previous transmission |
+| 1 | 0x02 | Door currently open |
+| 2 | 0x04 | Suspected tamper |
+| 3 | 0x08 | Connected to external power |
+| 4 | 0x10 | Battery OK (above 20 percent) |
+| 5-7 | | Reserved, always 0 |
 
-### בתים 6-7: סוללה
-uint16 בסדר בתים little-endian. ערך ADC גולמי בטווח 0-4095.
-המרה למילי-וולט בצד השרת: mv = adc * 4.
+### Bytes 6-7: battery
+uint16 little-endian. Raw ADC value in the range 0-4095.
+Server-side conversion to millivolts: mv = adc * 4.
 
-### בתים 8-11: מונה רצף
-uint32 בסדר בתים little-endian. עולה ב-1 בכל שידור, מתאפס
-באתחול המכשיר. משמש לזיהוי שדרים אבודים וכפולים.
+### Bytes 8-11: sequence counter
+uint32 little-endian. Increments by 1 on every transmission, resets
+on device reboot. Used to detect lost and duplicate transmissions.
 
-### בתים 12-22: שמור
-אפסים בגרסה 3. אין להסתמך על התוכן, מכשירים ישנים עלולים
-לשלוח שם זבל.
+### Bytes 12-22: reserved
+Zeros in version 3. Do not rely on the content; older devices may
+send garbage there.
 
-### בית 23: CRC-8
-פולינום 0x07, ערך התחלתי 0x00, ללא שיקוף, על בתים 0-22.
-הודעה עם CRC שגוי נזרקת ונרשמת כשגיאת קליטה. אין לתקן או לנחש.
+### Byte 23: CRC-8
+Polynomial 0x07, initial value 0x00, no reflection, over bytes 0-22.
+A message with a bad CRC is dropped and logged as a reception error.
+Never fix, never guess.
 
-## מימוש CRC-8 עזר
+## Reference CRC-8 implementations
 
 ```c
 uint8_t crc8(const uint8_t *data, size_t len) {

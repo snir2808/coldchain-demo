@@ -1,52 +1,55 @@
 # coldchain-demo
 
-מערכת דוגמה לניטור מכולות קירור: קליטת שדרים בינאריים ממכשירי מעקב, פענוח, זיהוי חריגות טמפרטורה והתראות.
+A sample cold-chain monitoring system: ingesting binary transmissions
+from tracking devices, decoding them, detecting temperature excursions
+and raising alerts.
 
-הריפו הזה נבנה כסביבת תרגול לעבודה עם Claude Code. מותר לשבור אותו.
+This repo was built as a practice environment for working with
+Claude Code. Breaking it is allowed.
 
-## רכיבים
+## Components
 
-| תיקייה | מה יש בה |
+| Directory | Contents |
 |---|---|
-| `firmware/` | קוד C שרץ על מכשיר המעקב: פענוח שדרי חיישנים ובדיקות |
-| `service/` | שירות Node + TypeScript: קליטת שדרים, זיהוי חריגות, התראות |
-| `dashboard/` | דשבורד React להצגת מכולות והתראות |
-| `scripts/` | סקריפטי Python: סימולציית מכשירים ודוח יומי |
-| `data/` | נתוני דוגמה: שדרים גולמיים |
+| `firmware/` | C code that runs on the tracking device: payload parsing and its tests |
+| `service/` | Node + TypeScript service: ingest, excursion detection, alerts |
+| `dashboard/` | React dashboard showing containers and alerts |
+| `scripts/` | Python scripts: device simulator and daily report |
+| `data/` | Sample data: raw transmissions |
 
-## הרצה
+## Running
 
 ```bash
-# התקנת תלויות (פעם אחת)
+# install dependencies (once)
 npm install
 
-# השירות (פורט 3000)
+# the service (port 3000)
 npm run dev
 
-# בטרמינל נוסף: הזרמת נתוני דוגמה מסימולטור המכשירים
+# in another terminal: stream sample data from the device simulator
 python3 scripts/simulate.py
 
-# טסטים של השירות
+# service tests
 npm test
 
-# קומפילציה והרצת בדיקות של קוד המכשיר
+# compile and run the device-code tests
 make parser
 ./firmware/test_parser
 
-# דשבורד (פורט 5173, דורש שהשירות רץ)
+# dashboard (port 5173, requires the service running)
 npm run dev -w dashboard
 ```
 
 ## API
 
-| Endpoint | תיאור |
+| Endpoint | Description |
 |---|---|
-| `POST /ingest` | קליטת שדר: `{"payload": "<hex>"}` |
-| `GET /containers` | מצב כל המכולות |
-| `GET /alerts` | יומן התראות |
-| `GET /health` | בדיקת חיים |
+| `POST /ingest` | Ingest a transmission: `{"payload": "<hex>"}` |
+| `GET /containers` | State of all containers |
+| `GET /alerts` | Alert log |
+| `GET /health` | Liveness check |
 
-## פרוטוקול השדרים
+## Transmission protocol
 
-שדר של 24 בתים ממכשיר המעקב. המפרט המלא נמצא ב-
+Each transmission is a 24-byte message. The full spec lives in
 `.claude/skills/sensor-protocol/payload-spec.md`.
