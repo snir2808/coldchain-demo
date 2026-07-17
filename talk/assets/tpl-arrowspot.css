@@ -516,3 +516,12 @@
 .tpl-as .mine-url{font-family:var(--mono,monospace);font-size:13px;color:var(--accent-3);margin-top:6px;direction:ltr;text-align:right}
 .tpl-as .mine-qr{flex:0 0 auto;width:74px;height:74px;background:#fff;border-radius:9px;padding:5px;box-shadow:0 0 0 1px rgba(91,214,162,.3)}
 .tpl-as .mine-qr svg{display:block;width:100%;height:100%}
+
+/* ================= story slide: personal ice-breaker ================= */
+.tpl-as .story{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:100%;gap:26px;padding:0 6%}
+.tpl-as .story .story-kicker{font-size:17px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-3)}
+.tpl-as .story .story-line{
+  font-size:clamp(40px,5.6vw,74px);font-weight:900;line-height:1.15;color:var(--text-1);max-width:15ch;
+}
+.tpl-as .story .story-line .hl{color:var(--accent)}
+.tpl-as .story .story-sub{font-size:20px;color:var(--text-2);line-height:1.5;max-width:40ch}
