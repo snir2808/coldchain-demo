@@ -8,11 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/fonts.css?v=4">
-<link rel="stylesheet" href="assets/base.css?v=4">
-<link rel="stylesheet" id="theme-link" href="assets/themes/arrowspot-cold.css?v=4">
-<link rel="stylesheet" href="assets/animations/animations.css?v=4">
-<link rel="stylesheet" href="assets/tpl-arrowspot.css?v=4">
+<link rel="stylesheet" href="assets/fonts.css?v=5">
+<link rel="stylesheet" href="assets/base.css?v=5">
+<link rel="stylesheet" id="theme-link" href="assets/themes/arrowspot-cold.css?v=5">
+<link rel="stylesheet" href="assets/animations/animations.css?v=5">
+<link rel="stylesheet" href="assets/tpl-arrowspot.css?v=5">
 </head>
 <body data-themes="arrowspot-cold,tokyo-night,catppuccin-mocha,dracula,nord,gruvbox-dark,rose-pine,terminal-green,cyberpunk-neon,aurora">
 <div class="deck tpl-as">
@@ -777,12 +777,9 @@ Known traps: see payload-spec.md</pre>
   }
   document.addEventListener('keydown', function(e){
     if (e.__rtlSwapped) return;
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      redispatch(e.key === 'ArrowLeft' ? 'ArrowRight' : 'ArrowLeft');
-      return;
-    }
+    /* Arrows pass straight through: RIGHT = forward, matching the
+       left-to-right timeline. (No RTL swap — the timeline, not the text
+       direction, sets the mental model here.) */
     var mapped = PHYSKEYS[e.code];
     if (mapped && !e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase() !== mapped){
       e.preventDefault();
@@ -956,7 +953,7 @@ Known traps: see payload-spec.md</pre>
   });
 })();
 </script>
-<script src="assets/runtime.js?v=4"></script>
-<script src="assets/animations/fx-runtime.js?v=4"></script>
+<script src="assets/runtime.js?v=5"></script>
+<script src="assets/animations/fx-runtime.js?v=5"></script>
 </body>
 </html>

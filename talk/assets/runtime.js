@@ -833,9 +833,9 @@
   document.addEventListener('keydown', function(e){
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     switch(e.key) {
-      /* RTL deck: LEFT advances, matching the audience window */
-      case 'ArrowLeft': case ' ': case 'PageDown': go(idx + 1); e.preventDefault(); break;
-      case 'ArrowRight': case 'PageUp':   go(idx - 1); e.preventDefault(); break;
+      /* RIGHT advances, matching the left-to-right timeline and the main window */
+      case 'ArrowRight': case ' ': case 'PageDown': go(idx + 1); e.preventDefault(); break;
+      case 'ArrowLeft': case 'PageUp':   go(idx - 1); e.preventDefault(); break;
       case 'Home': go(0); break;
       case 'End':  go(total - 1); break;
       case 'r': case 'R': resetTimer(); break;
