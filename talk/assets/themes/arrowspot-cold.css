@@ -1,0 +1,18 @@
+/* theme: arrowspot-cold
+ * ArrowSpot cold-chain palette: near-black night blue, ice cyan, thermal orange.
+ * Hebrew-first: Heebo for prose, IBM Plex Mono for code and numbers. */
+:root{
+  --bg:#05070C;--bg-soft:#0A101B;--surface:#0A101B;--surface-2:#0F1626;
+  --border:rgba(148,196,232,.14);--border-strong:rgba(148,196,232,.3);
+  --text-1:#ECF1F8;--text-2:#8A97B0;--text-3:#5E6E8C;
+  --accent:#7FE0F7;--accent-2:#FF7A59;--accent-3:#5BD6A2;
+  --good:#5BD6A2;--warn:#FFB84D;--bad:#FF7A59;
+  --grad:linear-gradient(135deg,#7FE0F7,#3E9BB0 55%,#FF7A59);
+  --grad-soft:linear-gradient(135deg,#0C1220,#101828);
+  --radius:10px;--radius-sm:7px;--radius-lg:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+  --shadow-lg:0 24px 62px rgba(0,0,0,.6);
+  --font-sans:'Heebo','Inter',sans-serif;
+  --font-display:'Heebo','Inter',sans-serif;
+  --font-mono:'IBM Plex Mono','JetBrains Mono',monospace;
+}
